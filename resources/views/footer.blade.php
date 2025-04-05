@@ -2,12 +2,17 @@
   p{
     color:#4f4f4f;
   }
+  footer {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
 </style>
 <footer style="background:linear-gradient(rgba(128, 128, 128, 0.5), rgba(113, 106, 106, 0.5)), url('img\\innisfree.jpeg');background-size: cover; /* Ensures the image covers the entire header */
         background-position: center; /* Centers the image */
         background-repeat: no-repeat; /* Prevents the image from repeating */
         color: white;" class="mt-5">
-    <div class="container p-4">
+    <div class="container-fluid p-4">
       <div class="row">
         <div class="col-lg-6 col-md-12 mb-4">
           <h5 class="mb-3" style="letter-spacing: 2px; color:rgb(0, 0, 0);">Para4You</h5>

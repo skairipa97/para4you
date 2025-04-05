@@ -1,93 +1,233 @@
 @extends('layout')
-@section('title', 'Para4You')
+
+@section('title', 'Shop - Para4You')
+
+@section('page_styles')
 <style>
-  /* Ajouter un style de bouton rose */
-.btn-pink {
-    background-color:#c98eb6; /* Couleur rose */
-    color: white; /* Texte blanc */
-    border: none; /* Retirer les bordures */
-    padding: 10px 20px; /* Ajouter de l'espace autour du texte */
-    border-radius: 25px; /* Bords arrondis */
-    font-weight: bold; /* Mettre en gras le texte */
-    text-transform: uppercase; /* Mettre le texte en majuscule */
-    transition: background-color 0.3s, transform 0.2s; /* Ajout d'une transition pour un effet doux */
-}
-
-.btn-pink:hover {
-    background-color:#c98eb6; /* Couleur rose plus foncée au survol */
-    transform: scale(1.05); /* Légère augmentation de la taille lors du survol */
-}
-
+    .product-card {
+        border-radius: 12px;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .product-card .card-img-container {
+        height: 250px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .product-card .card-img-top {
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+    
+    .product-card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+    
+    .product-card .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .product-card .card-title {
+        font-weight: 600;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+    
+    .product-card .card-text {
+        color: #6c757d;
+        margin-bottom: 15px;
+        flex-grow: 1;
+    }
+    
+    .product-card .price {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.25rem;
+        margin-bottom: 15px;
+        display: block;
+    }
+    
+    .product-card .card-footer {
+        border-top: none;
+        background: none;
+        padding-top: 0;
+    }
+    
+    .category-filter {
+        margin-bottom: 40px;
+    }
+    
+    .btn-category {
+        padding: 8px 20px;
+        margin: 0 5px 10px;
+        border-radius: 25px;
+        font-weight: 500;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        color: #212529;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-category:hover, .btn-category.active {
+        background-color: var(--primary);
+        border-color: var(--primary);
+        color: white;
+    }
+    
+    .shop-header {
+        background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/img/shop-banner.jpg');
+        background-size: cover;
+        background-position: center;
+        padding: 80px 0;
+        margin-bottom: 50px;
+        position: relative;
+    }
+    
+    .shop-header h1 {
+        color: white;
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    
+    .shop-header p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .product-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        z-index: 2;
+    }
+    
+    .badge-new {
+        background-color: var(--primary);
+        color: white;
+    }
+    
+    .badge-sale {
+        background-color: #dc3545;
+        color: white;
+    }
+    
+    .original-price {
+        text-decoration: line-through;
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-right: 8px;
+    }
 </style>
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+@endsection
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com" rel="preconnect">
-  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900&display=swap" rel="stylesheet">
+@section('content')
+<!-- Shop Header Section -->
+<section class="shop-header text-center">
+    <div class="container">
+        <h1 data-aos="fade-up">Our Products</h1>
+        <p data-aos="fade-up" data-aos-delay="100">Discover our curated collection of premium beauty and personal care products designed to enhance your natural beauty.</p>
+    </div>
+</section>
 
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-
-  <!-- Main CSS File -->
-  <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: Active
-  * Template URL: https://bootstrapmade.com/active-bootstrap-website-template/
-  * Updated: Aug 07 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/isotope/3.0.6/isotope.pkgd.min.js"></script>
-
-  @section('content')
-    <!-- Portfolio Section -->
-    <section id="portfolio" class="portfolio section">
-      <div class="container">
-
-        <form action="{{ route('produits.index') }}" method="GET">
-          <ul class="portfolio-filters isotope-filters" data-aos="fade-up" data-aos-delay="100">
-              <li data-filter="*" class="filter-active">
-                  <button type="submit" name="category" value="*" class='btn-pink'>All</button>
-              </li data-filter=".filter-app">
-              @foreach ($categories as $category)
-                  <li>
-                      <button type="submit" name="category" value="{{ $category }}" class='btn-pink'>{{ ucfirst($category) }}</button>
-                  </li>
-              @endforeach
-          </ul>
-        </form>
-
-        <!-- Portfolio Items -->
-        <div class="portfolio-items">
-            @foreach($products as $product)
-                <div class="col-lg-4 col-md-6 portfolio-item filter-{{ strtolower($product->category) }}">
-                    <div class="card">
-                        <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top img-fluid" alt="{{ $product->name }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $product->name }}</h5>
-                            <p class="card-text">{{ $product->description }}</p>
-                            <p class="card-text"><strong>Price: ${{ $product->price }}</strong></p>
-                            <a href="#" class="btn btn-primary">Buy Now</a>
+<!-- Products Section -->
+<section class="products-section py-5">
+    <div class="container">
+        <!-- Category Filters -->
+        <div class="category-filter text-center" data-aos="fade-up">
+            <form action="{{ route('produits.index') }}" method="GET" class="d-inline-block">
+                <button type="submit" name="category" value="*" class="btn btn-category {{ request('category') == '*' || !request('category') ? 'active' : '' }}">
+                    All Products
+                </button>
+                
+                @foreach ($categories as $category)
+                    <button type="submit" name="category" value="{{ $category }}" class="btn btn-category {{ request('category') == $category ? 'active' : '' }}">
+                        {{ ucfirst($category) }}
+                    </button>
+                @endforeach
+            </form>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="row g-4">
+            @if($products->count() > 0)
+                @foreach($products as $product)
+                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="{{ $loop->iteration * 50 }}">
+                        <div class="card product-card h-100">
+                            <div class="card-img-container">
+                                @if($loop->iteration % 5 == 0)
+                                    <span class="product-badge badge-sale">Sale</span>
+                                @elseif($loop->iteration % 4 == 0)
+                                    <span class="product-badge badge-new">New</span>
+                                @endif
+                                
+                                <img src="{{ asset('storage/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}">
+                            </div>
+                            
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $product->name }}</h5>
+                                <p class="card-text">{{ \Illuminate\Support\Str::limit($product->description, 100) }}</p>
+                                
+                                @if($loop->iteration % 5 == 0)
+                                    <span class="price">
+                                        <span class="original-price">${{ number_format($product->price * 1.2, 2) }}</span>
+                                        ${{ number_format($product->price, 2) }}
+                                    </span>
+                                @else
+                                    <span class="price">${{ number_format($product->price, 2) }}</span>
+                                @endif
+                            </div>
+                            
+                            <div class="card-footer d-flex justify-content-between">
+                                <button class="btn btn-outline-primary add-to-cart" 
+                                    data-product-id="{{ $product->id }}"
+                                    data-product-name="{{ $product->name }}"
+                                    data-product-price="{{ $product->price }}"
+                                    data-product-image="{{ asset('storage/' . $product->image) }}">
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                </button>
+                                <button class="btn btn-outline-dark">
+                                    <i class="bi bi-eye"></i> Details
+                                </button>
+                            </div>
                         </div>
                     </div>
+                @endforeach
+            @else
+                <div class="col-12 text-center py-5">
+                    <h3>No products found</h3>
+                    <p>We couldn't find any products matching your criteria. Please try another category.</p>
                 </div>
-            @endforeach
+            @endif
         </div>
-        <!-- End Portfolio Items -->
-
-      </div>
-    </section>
-    <!-- End Portfolio Section -->
+        
+        <!-- Pagination -->
+        <div class="d-flex justify-content-center mt-5">
+            {{ $products->links() }}
+        </div>
+    </div>
+</section>
 
 @include('avis')
 @include('footer')
+@endsection
+
+@section('page_scripts')
+<script>
+    // Add specific scripts for the products page if needed
+</script>
 @endsection

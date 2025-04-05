@@ -11,15 +11,14 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        dd($request->all());
         // Get the selected category from the request (default to all if not provided)
         $category = $request->get('category', '*');
     
         // Fetch products based on the selected category with pagination
         if ($category === '*') {
-            $products = Product::paginate(5); // Paginate products, 5 per page
+            $products = Product::paginate(12); // Increased pagination to show more products
         } else {
-            $products = Product::where('category', $category)->paginate(5); // Filter by category and paginate
+            $products = Product::where('category', $category)->paginate(12); // Filter by category and paginate
         }
     
         // Get all available categories for the filter

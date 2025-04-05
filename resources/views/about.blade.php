@@ -1,5 +1,9 @@
+@extends('layout')
+
+@section('title', 'À propos - Para4You')
+
+@section('page_styles')
 <link rel="stylesheet" href="{{ asset('css/main.css') }}">
-<script src="{{ asset('js/main.js') }}"></script>
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 <style>
@@ -10,16 +14,40 @@
   border-radius: 50%;
   max-height: 300px; /* Makes the images circular */
   object-fit: cover; /* Ensures the image fits within the container */
-}
+  }
 </style>
+@endsection
+
+@section('page_scripts')
 <!-- Swiper JS -->
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<!-- Swiper Initialization Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const swiper = new Swiper('.init-swiper-tabs', {
+      loop: true,
+      speed: 600,
+      autoHeight: true,
+      autoplay: {
+        delay: 5000,
+      },
+      slidesPerView: 'auto',
+      pagination: {
+        el: '.swiper-pagination',
+      }
+    });
+  });
+</script>
+@endsection
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+@section('content')
+<!-- About Section - Main content section -->
 <section id="about-2" class="about-2 section">
-
 <div class="container">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Qui sommes-nous?</h2>
+    <h1>Notre Mission</h1>
+  </div>
   <div class="content">
     <div class="row justify-content-center">
       <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 order-lg-2 offset-xl-1 mb-4">
@@ -40,7 +68,7 @@
           Que vous ayez la peau sèche, grasse, ou sensible, nos produits nourrissent, hydratent et revitalisent pour un teint éclatant de santé.           </p>
           <p class="mb-5">
            
-          Offrez à votre peau le luxe qu’elle mérite avec nos soins efficaces et adaptés à tous les besoins, pour une expérience de soin unique et inoubliable.
+          Offrez à votre peau le luxe qu'elle mérite avec nos soins efficaces et adaptés à tous les besoins, pour une expérience de soin unique et inoubliable.
 
           </p>
           <p>
@@ -52,8 +80,14 @@
   </div>
 </div>
 </section>
+
+<!-- Features Section - Our services and benefits -->
 <section id="tabs" class="tabs section light-background">
   <div class="container">
+    <div class="container section-title" data-aos="fade-up">
+      <h2>Nos Services</h2>
+      <h1>Pourquoi Nous Choisir</h1>
+    </div>
     <div class="row gap-x-lg-4 justify-content-between">
       <div class="col-lg-4 js-custom-dots">
            <a href="#about2" class="service-item link horizontal d-flex active" data-aos="fade-left" data-aos-delay="0">
@@ -109,7 +143,7 @@
           <div class="service-contents">
             <h3>Chouchoutez votre peau</h3>
             <p>
-              Offrez à votre peau l’attention qu’elle mérite avec des produits de soins naturels et respectueux.
+              Offrez à votre peau l'attention qu'elle mérite avec des produits de soins naturels et respectueux.
             </p>
           </div>
           <!-- /.service-contents-->
@@ -148,26 +182,6 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide">
               <img src="img/ab1.jpeg" alt="Image" class="img-fluid">
-              <!-- <div class="p-4">
-                <h3 class="text-black h5 mb-3">Des soins doux et efficaces</h3>
-                <div class="row">
-                  <div class="col-lg-8">
-                    <p>
-                      Bien au-delà des tendances, nos produits de soins respectent les besoins uniques de votre peau.
-                    </p>
-                    <p>
-                      Nos formules, enrichies en ingrédients naturels, apportent hydratation et éclat durablement.
-                    </p>
-                  </div>
-                  <div class="col-lg-4">
-                    <ul class="list-unstyled list-check">
-                      <li>Des produits adaptés à votre peau</li>
-                      <li>Ingrédients naturels et efficaces</li>
-                      <li>Résultats visibles au quotidien</li>
-                    </ul>
-                  </div>
-                </div>
-              </div> -->
             </div>
             <div class="swiper-slide">
               <img src="img/products.jpeg" alt="Image" class="img-fluid">
@@ -179,83 +193,15 @@
               <img src="img/girlglow.jpeg" alt="Image" class="img-fluid">
             </div>
           </div>
+          <div class="swiper-pagination"></div>
         </div>
       </div>
     </div>
   </div>
-    </section>
-@include('avis')
-<!-- Swiper Initialization Script -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const swiper = new Swiper('.init-swiper-tabs', {
-      loop: true,
-      speed: 600,
-      autoHeight: true,
-      autoplay: {
-        delay: 5000,
-      },
-      slidesPerView: 'auto',
-      pagination: {
-        el: '.swiper-pagination',
-        type: 'bullets',
-        clickable: true,
-      },
-      breakpoints: {
-        320: {
-          slidesPerView: 1,
-          spaceBetween: 40,
-        },
-        1200: {
-          slidesPerView: 1,
-          spaceBetween: 1,
-        },
-      },
-    });
-  });
-  function initSwiperTabs() {
-      document
-        .querySelectorAll(".init-swiper-tabs")
-        .forEach(function(swiperElement) {
-          let config = JSON.parse(
-            swiperElement.querySelector(".swiper-config").innerHTML.trim()
-          );
+</section>
 
-          const dotsContainer = swiperElement
-            .closest("section")
-            .querySelector(".js-custom-dots");
-          if (!dotsContainer) return;
+@endsection
 
-          const customDots = dotsContainer.querySelectorAll("a");
-
-          // Remove the default pagination setting
-          delete config.pagination;
-
-          const swiperInstance = new Swiper(swiperElement, config);
-
-          swiperInstance.on("slideChange", function() {
-            updateSwiperTabsPagination(swiperInstance, customDots);
-          });
-
-          customDots.forEach((dot, index) => {
-            dot.addEventListener("click", function(e) {
-              e.preventDefault();
-              swiperInstance.slideToLoop(index);
-              updateSwiperTabsPagination(swiperInstance, customDots);
-            });
-          });
-
-          updateSwiperTabsPagination(swiperInstance, customDots);
-        });
-    }
-
-    // Dummy function for updating the custom dots (you can implement this as needed)
-    function updateSwiperTabsPagination(swiperInstance, customDots) {
-      customDots.forEach((dot, index) => {
-        dot.classList.toggle("active", index === swiperInstance.realIndex);
-      });
-    }
-
-    // Initialize Swipers
-    document.addEventListener("DOMContentLoaded", initSwiperTabs);
-</script>
+@section('footer')
+@include('footer')
+@endsection
