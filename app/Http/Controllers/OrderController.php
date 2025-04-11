@@ -24,27 +24,62 @@ class OrderController extends Controller
         return view('admin', compact('products', 'users')); // Pass both to the view
     }
     
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
-{
-    // Validate the request
-    $validated = $request->validate([
-        'product_id' => 'required|exists:products,id',
-        'quantity' => 'required|integer',
-        'username' => 'required|exists:users,username', // Check if the username exists in the users table
-    ]);
+    {
+        // Validate the order data
+        $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'address' => 'required|string|max:255',
+            'postal_code' => 'required|string|max:20',
+            'city' => 'required|string|max:100',
+            'phone' => 'required|string|max:20',
+            'payment_method' => 'required|string|in:card,paypal',
+            'order_items' => 'required|json',
+            'order_total' => 'required|numeric',
+        ]);
 
-    // Get the user by username
-    $user = User::where('username', $validated['username'])->first();
-
-    // Create and store the order
-    $order = new Order();
-    $order->product_id = $validated['product_id'];
-    $order->quantity = $validated['quantity'];
-    $order->user_id = $user->id;  // Store the user_id
-    $order->save();
-
-    return redirect()->route('orders.index')->with('success', 'Order placed successfully!');
-}
+        // Decode the order items
+        $orderItems = json_decode($request->order_items, true);
+        
+        // Create a new order
+        $order = new Order();
+        
+        // Set the user_id if the user is logged in
+        if (session('user_id')) {
+            $order->user_id = session('user_id');
+        }
+        
+        // Set order details
+        $order->order_number = 'ORD-' . time() . rand(100, 999);
+        $order->first_name = $request->first_name;
+        $order->last_name = $request->last_name;
+        $order->email = $request->email;
+        $order->address = $request->address;
+        $order->postal_code = $request->postal_code;
+        $order->city = $request->city;
+        $order->phone = $request->phone;
+        $order->payment_method = $request->payment_method;
+        $order->total_amount = $request->order_total;
+        $order->status = 'pending';
+        $order->order_details = json_encode($orderItems);
+        
+        // Save the order
+        $order->save();
+        
+        // Clear the cart in the session
+        session()->forget('cart');
+        
+        // Redirect to a thank you page
+        return view('orders.confirmation', [
+            'order' => $order,
+            'orderItems' => $orderItems
+        ]);
+    }
 
     
 

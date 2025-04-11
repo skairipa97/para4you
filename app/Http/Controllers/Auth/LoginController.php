@@ -73,6 +73,58 @@ class LoginController extends Controller
         session()->flush(); // Clear the session
         return redirect()->route('login'); // Redirect to the login page
     }
+
+    /**
+     * Update the user profile.
+     */
+    public function updateProfile(Request $request)
+    {
+        // Validate the profile update input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'current_password' => 'required|string',
+        ]);
+
+        // Only validate password if a new one is provided
+        if ($request->filled('new_password')) {
+            $request->validate([
+                'new_password' => 'required|string|min:8',
+                'new_password_confirmation' => 'required|same:new_password',
+            ]);
+        }
+
+        // Get the logged-in user
+        $user = User::find(session('user_id'));
+
+        if (!$user) {
+            return redirect()->route('login')->withErrors(['auth_error' => 'User not found.']);
+        }
+
+        // Verify current password
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Current password is incorrect.'])->withInput();
+        }
+
+        // Update user data
+        $user->name = $request->name;
+        $user->email = $request->email;
+
+        // Update password if a new one is provided
+        if ($request->filled('new_password')) {
+            $user->password = Hash::make($request->new_password);
+        }
+
+        $user->save();
+
+        // Update session data
+        session([
+            'name' => $user->name,
+            'email' => $user->email,
+        ]);
+
+        return redirect()->route('profile')->with('success', 'Profile updated successfully!');
+    }
 }
 
 

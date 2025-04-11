@@ -9,7 +9,26 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['product_id', 'quantity', 'user_id'];  // Use 'user_id' instead of 'username'
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'user_id', 
+        'order_number',
+        'first_name',
+        'last_name',
+        'email',
+        'address',
+        'postal_code',
+        'city',
+        'phone',
+        'payment_method',
+        'total_amount',
+        'status',
+        'order_details'
+    ];
 
     // Define the relationship with the Product model
     public function product()
@@ -17,7 +36,9 @@ class Order extends Model
         return $this->belongsTo(Product::class);
     }
 
-    // Define the relationship with the User model
+    /**
+     * Get the user that owns the order.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
