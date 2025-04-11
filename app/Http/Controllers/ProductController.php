@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         // Get the selected category from the request (default to all if not provided)
         $category = $request->get('category', '*');
     

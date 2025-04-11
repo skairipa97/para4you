@@ -27,7 +27,8 @@ class LoginController extends Controller
 
         // Find the user by username
   
-        $user = User::where('username', $request->username)->first();
+
+        $user->save();
 
         if (!$user) {
             logger("User not found with username: {$request->username}");
